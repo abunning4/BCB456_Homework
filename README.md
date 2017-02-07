@@ -7,6 +7,12 @@ This is my repo for the UNIX homework for BCB546
 
 * First thing I did was to create a new repo on my github for the specific assignment and used `git clone https://github.com/abunning4/UNIX_Exercise.git` to clone my repo to my desktop  
 
+## Navigating my Repo
+* All the final 40 files are in the Final Files directory on github and within that directory the 40 files are divided by ?/? (question data) and -/- (dash data) 
+	* both the teosinte and maize are in the those two files 
+
+* All the files generated to get to the final files are in a directory named Intermediate Files  
+
 ## Data Inspection
 
 1. `fang_et_al_genotypes.txt` 
@@ -48,5 +54,10 @@ This is my repo for the UNIX homework for BCB546
 	* This was completed for every chromosome in both maize and teosinte to generate ten files for the ?/? data 
 
 * In each of these  chromosome specific files, the `sort` function was used to order them in ascending chromosome position value 
+	* Example of command: `sort -k 3,3 chr1_teosinte_question.txt > chr1_teosinte_sorted_question.txt` 
 
-* the `sed` function was then used 
+* the `sed` function was then used to generate the data files replacing the ?/? with -/- 
+	* Example of one command: `sed 's/\?/\-/g' chr10_teosinte_sorted_question.txt > chr10_teosinte_sorted_dash.txt`
+
+
+ 
