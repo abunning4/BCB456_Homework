@@ -1,0 +1,21 @@
+---
+title: "R_Homework"
+author: Angela Bunning
+date: 2.23.17
+output: html_document
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Load in data into my project: 
+`fang_et_al_genotypes.txt`:
+```{r}
+genotype_data_raw <- read.table(file = "fang_et_al_genotypes.txt", as.is = TRUE)
+```
+
+`snp_position.txt`:
+
+
