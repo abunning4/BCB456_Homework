@@ -10,12 +10,77 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Load in data into my project: 
+Load in data to my project: 
 `fang_et_al_genotypes.txt`:
 ```{r}
 genotype_data_raw <- read.table(file = "fang_et_al_genotypes.txt", as.is = TRUE)
 ```
 
 `snp_position.txt`:
+```{r}
+snp_position_data_raw <- read.delim(file = "snp_position.txt", as.is = TRUE)
+```
+
+#Data Inspection:
+
+`fang_et_al_genotypes.txt`:  
+
+File size: 10.5 MB
+
+Structure:
+```{r}
+str(genotype_data_raw)
+```
+
+* It is a data frame with 2783 observations and 986 variables total
+
+
+Number of columns and rows:
+```{r}
+ncol(genotype_data_raw)      #986 columns
+nrow(genotype_data_raw)      #2783 rows
+```
+
+Names of each variable:
+```{r}
+names_genotype <- names(genotype_data_raw)
+names_genotype
+```
+
+Summary:
+```{r}
+summary(genotype_data_raw)
+```
+
+`snp_position.txt`
+
+File size: 80.8 KB
+
+Structure: 
+```{r}
+str(snp_position_data_raw)
+```
+
+* data frame with 983 observations of 15 variables 
+
+Number of rows and columns: 
+```{r}
+rows_snp_data <- nrow(snp_position_data_raw) # 983 rows
+columns_snp_data <- ncol(snp_position_data_raw) # 15 columns 
+```
+
+Names of each variable:
+```{r}
+names_snps <- names(snp_position_data_raw)
+names_snps
+```
+
+Summary:
+```{r}
+summary(snp_position_data_raw)
+```
+
+
+
 
 
