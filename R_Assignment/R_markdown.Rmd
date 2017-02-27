@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 Load in data to my project: 
 `fang_et_al_genotypes.txt`:
 ```{r}
-genotype_data_raw <- read.table(file = "fang_et_al_genotypes.txt", as.is = TRUE)
+genotype_data_raw <- read.table(file = "fang_et_al_genotypes.txt", as.is = TRUE, header = TRUE)
 ```
 
 `snp_position.txt`:
@@ -84,25 +84,60 @@ snp_summary
 
 # Data Proccessing 
 
-First, separate out the groups of interest we want for maize (ZMMIL, ZMMLR, and ZMMMR) and teosinte (ZMPBA, ZMPIL, and ZMPJA) from `fang_et_al_genotypes.txt`:
+* First, separate out the groups of interest we want for maize (ZMMIL, ZMMLR, and ZMMMR) and teosinte (ZMPBA, ZMPIL, and ZMPJA) from `fang_et_al_genotypes.txt`:
 
 ```{r}
 library(dplyr)
-require(dplyr)
 ```
 
 For maize:
 ```{r}
-genotypes_by_groups_maize <- filter(genotype_data_raw, V3 == "ZMMIL" | V3 == "ZMMLR" | V3 == "ZMMMR")
+genotypes_by_groups_maize <- filter(genotype_data_raw, Group == "ZMMIL" | Group == "ZMMLR" | Group == "ZMMMR")
 genotypes_by_groups_maize
 ```
 
 For teosinte: 
 ```{r}
-genotypes_by_groups_teosinte <- filter(genotype_data_raw, V3 == "ZMPBA" | V3 == "ZMPIL" | V3 == "ZMPJA")
+genotypes_by_groups_teosinte <- filter(genotype_data_raw, Group == "ZMPBA" | Group == "ZMPIL" | Group == "ZMPJA")
 genotypes_by_groups_teosinte
 ```
 
 
+* Transpose data for both maize and teosinte:
 
+maize:
+```{r}
+genotypes_maize_transposed <- t(genotypes_by_groups_maize)
+genotypes_maize_transposed
+```
+
+teosinte:
+```{r}
+genotypes_teosinte_transposed <- t(genotypes_by_groups_teosinte)
+genotypes_teosinte_transposed
+```
+
+* Only need certain columns from the `snp_position.txt` file for the analysis so we can cut those out by using the `select` function in dplyr:
+```{r}
+snp_columns_needed <- select(snp_position_data_raw, SNP_ID, Chromosome, Position)
+snp_columns_needed
+```
+
+
+* Rename row names in `snp_position.txt`:
+```{r}
+rownames(snp_columns_needed) <- snp_columns_needed$SNP_ID
+```
+
+* Now we need to join the `snp_position.txt` with each of the maize group transposed and teosinte group transposed data files:
+
+maize:
+```{r}
+joined_maize_genotypes_snp <- merge(snp_columns_needed, genotypes_maize_transposed, by ="row.names")
+```
+
+teosinte: 
+```{r}
+joined_teosinte_genotypes_snp <- merge(snp_columns_needed, genotypes_teosinte_transposed, by = "row.names")
+```
 
