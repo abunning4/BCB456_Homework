@@ -49,7 +49,8 @@ names_genotype
 
 Summary:
 ```{r}
-summary(genotype_data_raw)
+genotype_summary <- summary(genotype_data_raw)
+genotype_summary
 ```
 
 `snp_position.txt`
@@ -77,9 +78,30 @@ names_snps
 
 Summary:
 ```{r}
-summary(snp_position_data_raw)
+snp_summary <- summary(snp_position_data_raw)
+snp_summary
 ```
 
+# Data Proccessing 
+
+First, separate out the groups of interest we want for maize (ZMMIL, ZMMLR, and ZMMMR) and teosinte (ZMPBA, ZMPIL, and ZMPJA) from `fang_et_al_genotypes.txt`:
+
+```{r}
+library(dplyr)
+require(dplyr)
+```
+
+For maize:
+```{r}
+genotypes_by_groups_maize <- filter(genotype_data_raw, V3 == "ZMMIL" | V3 == "ZMMLR" | V3 == "ZMMMR")
+genotypes_by_groups_maize
+```
+
+For teosinte: 
+```{r}
+genotypes_by_groups_teosinte <- filter(genotype_data_raw, V3 == "ZMPBA" | V3 == "ZMPIL" | V3 == "ZMPJA")
+genotypes_by_groups_teosinte
+```
 
 
 
