@@ -13,13 +13,18 @@ knitr::opts_chunk$set(echo = TRUE)
 Load in data to my project: 
 `fang_et_al_genotypes.txt`:
 ```{r}
-genotype_data_raw <- read.table(file = "fang_et_al_genotypes.txt", as.is = TRUE, header = TRUE)
+genotype_data_raw <- read.table(file = "fang_et_al_genotypes.txt", header = TRUE)
+
+typeof(genotype_data_raw)
+
+str(genotype_data_raw)
 ```
 
 `snp_position.txt`:
 ```{r}
-snp_position_data_raw <- read.delim(file = "snp_position.txt", as.is = TRUE)
+snp_position_data_raw <- read.delim(file = "snp_position.txt")
 ```
+
 
 #Data Inspection:
 
@@ -90,13 +95,13 @@ snp_summary
 library(dplyr)
 ```
 
-For maize:
+**maize:**
 ```{r}
 genotypes_by_groups_maize <- filter(genotype_data_raw, Group == "ZMMIL" | Group == "ZMMLR" | Group == "ZMMMR")
 genotypes_by_groups_maize
 ```
 
-For teosinte: 
+**teosinte:**
 ```{r}
 genotypes_by_groups_teosinte <- filter(genotype_data_raw, Group == "ZMPBA" | Group == "ZMPIL" | Group == "ZMPJA")
 genotypes_by_groups_teosinte
@@ -105,13 +110,13 @@ genotypes_by_groups_teosinte
 
 * Transpose data for both maize and teosinte:
 
-maize:
+**maize:**
 ```{r}
 genotypes_maize_transposed <- t(genotypes_by_groups_maize)
 genotypes_maize_transposed
 ```
 
-teosinte:
+**teosinte:**
 ```{r}
 genotypes_teosinte_transposed <- t(genotypes_by_groups_teosinte)
 genotypes_teosinte_transposed
@@ -131,13 +136,221 @@ rownames(snp_columns_needed) <- snp_columns_needed$SNP_ID
 
 * Now we need to join the `snp_position.txt` with each of the maize group transposed and teosinte group transposed data files:
 
-maize:
+**maize:**
 ```{r}
-joined_maize_genotypes_snp <- merge(snp_columns_needed, genotypes_maize_transposed, by ="row.names")
+joined_maize_genotypes_snp <- merge(snp_columns_needed, genotypes_maize_transposed, by ="row.names", all = FALSE)
+
+joined_maize_genotypes_snp <- subset(joined_maize_genotypes_snp, select = -c(2,5:15))
 ```
 
-teosinte: 
+**teosinte:**
 ```{r}
-joined_teosinte_genotypes_snp <- merge(snp_columns_needed, genotypes_teosinte_transposed, by = "row.names")
+joined_teosinte_genotypes_snp <- merge(snp_columns_needed, genotypes_teosinte_transposed, by = "row.names", all = FALSE)
+
+joined_teosinte_genotypes_snp <- subset(joined_teosinte_genotypes_snp, select = -c(2,5:15))
+
 ```
+
+* For all **maize** files that are chromosome specific (chromosome 1-10), with **acending** chromosome position values, and have missing data encoded by a **?** : 
+
+**maize** chromomsome 1:
+```{r}
+chromosome1_maize_genotypes_snp <- filter(joined_maize_genotypes_snp, Chromosome == 1)
+
+chromosome1_maize_genotypes_snp_arrange_ascending <- arrange(chromosome1_maize_genotypes_snp, Position)
+
+write.csv(chromosome1_maize_genotypes_snp_arrange_ascending, "~/Desktop/BCB546_Assignments/R_Assignment/maize_final_files/chr1_maize_ascending_question.csv", row.names=F)
+```
+
+**maize** chromosome 2:
+```{r}
+chromosome2_maize_genotypes_snp <- filter(joined_maize_genotypes_snp, Chromosome == 2)
+
+chromosome2_maize_genotypes_snp_arrange_ascending <- arrange(chromosome2_maize_genotypes_snp, Position)
+
+write.csv(chromosome2_maize_genotypes_snp_arrange_ascending, "~/Desktop/BCB546_Assignments/R_Assignment/maize_final_files/chr2_maize_ascending_question.csv", row.names=F)
+```
+
+**maize** chromosome 3: 
+```{r}
+chromosome3_maize_genotypes_snp <- filter(joined_maize_genotypes_snp, Chromosome == 3)
+
+chromosome3_maize_genotypes_snp_arrange_ascending <- arrange(chromosome3_maize_genotypes_snp, Position)
+
+write.csv(chromosome3_maize_genotypes_snp_arrange_ascending, "~/Desktop/BCB546_Assignments/R_Assignment/maize_final_files/chr3_maize_ascending_question.csv", row.names=F)
+```
+
+**maize** chromosome 4:
+```{r}
+chromosome4_maize_genotypes_snp <- filter(joined_maize_genotypes_snp, Chromosome == 4)
+
+chromosome4_maize_genotypes_snp_arrange_ascending <- arrange(chromosome2_maize_genotypes_snp, Position)
+
+write.csv(chromosome4_maize_genotypes_snp_arrange_ascending, "~/Desktop/BCB546_Assignments/R_Assignment/maize_final_files/chr4_maize_ascending_question.csv", row.names=F)
+```
+
+**maize** chromosome 5:
+```{r}
+chromosome5_maize_genotypes_snp <- filter(joined_maize_genotypes_snp, Chromosome == 5)
+
+chromosome5_maize_genotypes_snp_arrange_ascending <- arrange(chromosome5_maize_genotypes_snp, Position)
+
+write.csv(chromosome5_maize_genotypes_snp_arrange_ascending, "~/Desktop/BCB546_Assignments/R_Assignment/maize_final_files/chr5_maize_ascending_question.csv", row.names=F)
+```
+
+
+**maize** chromosome 6:
+```{r}
+chromosome6_maize_genotypes_snp <- filter(joined_maize_genotypes_snp, Chromosome == 6)
+
+chromosome6_maize_genotypes_snp_arrange_ascending <- arrange(chromosome6_maize_genotypes_snp, Position)
+
+write.csv(chromosome6_maize_genotypes_snp_arrange_ascending, "~/Desktop/BCB546_Assignments/R_Assignment/maize_final_files/chr6_maize_ascending_question.csv", row.names=F)
+```
+
+**maize** chromosome 7:
+```{r}
+chromosome7_maize_genotypes_snp <- filter(joined_maize_genotypes_snp, Chromosome == 7)
+
+chromosome7_maize_genotypes_snp_arrange_ascending <- arrange(chromosome7_maize_genotypes_snp, Position)
+
+write.csv(chromosome7_maize_genotypes_snp_arrange_ascending, "~/Desktop/BCB546_Assignments/R_Assignment/maize_final_files/chr7_maize_ascending_question.csv", row.names=F)
+```
+
+**maize** chromosome 8:
+```{r}
+chromosome8_maize_genotypes_snp <- filter(joined_maize_genotypes_snp, Chromosome == 8)
+
+chromosome8_maize_genotypes_snp_arrange_ascending <- arrange(chromosome8_maize_genotypes_snp, Position)
+
+write.csv(chromosome8_maize_genotypes_snp_arrange_ascending, "~/Desktop/BCB546_Assignments/R_Assignment/maize_final_files/chr8_maize_ascending_question.csv", row.names=F)
+```
+
+
+**maize** chromosome 9:
+```{r}
+chromosome9_maize_genotypes_snp <- filter(joined_maize_genotypes_snp, Chromosome == 9)
+
+chromosome9_maize_genotypes_snp_arrange_ascending <- arrange(chromosome9_maize_genotypes_snp, Position)
+
+write.csv(chromosome9_maize_genotypes_snp_arrange_ascending, "~/Desktop/BCB546_Assignments/R_Assignment/maize_final_files/chr9_maize_ascending_question.csv", row.names=F)
+```
+
+
+**maize** chromosome 10:
+```{r}
+chromosome10_maize_genotypes_snp <- filter(joined_maize_genotypes_snp, Chromosome == 10)
+
+chromosome10_maize_genotypes_snp_arrange_ascending <- arrange(chromosome10_maize_genotypes_snp, Position)
+
+write.csv(chromosome10_maize_genotypes_snp_arrange_ascending, "~/Desktop/BCB546_Assignments/R_Assignment/maize_final_files/chr10_maize_ascending_question.csv", row.names=F)
+```
+
+
+* For all **teosinte** files that are chromosome specific (chromosome 1-10), with **acending** chromosome position values, and have missing data encoded by a **?** : 
+
+**teosinte** chromosome 1: 
+```{r}
+chromosome1_teosinte_genotypes_snp<- filter(joined_teosinte_genotypes_snp, Chromosome == 1)
+
+chromosome1_teosinte_genotypes_snp_arrange_ascending <- arrange(chromosome1_teosinte_genotypes_snp, Position)
+
+write.csv(chromosome1_teosinte_genotypes_snp_arrange_ascending, "~/Desktop/BCB546_Assignments/R_Assignment/maize_final_files/chr1_teosinte_ascending_question.csv", row.names=F)
+```
+
+**teosinte** chromosome 2: 
+```{r}
+chromosome2_teosinte_genotypes_snp<- filter(joined_teosinte_genotypes_snp, Chromosome == 2)
+
+chromosome2_teosinte_genotypes_snp_arrange_ascending <- arrange(chromosome2_teosinte_genotypes_snp, Position)
+
+write.csv(chromosome2_teosinte_genotypes_snp_arrange_ascending, "~/Desktop/BCB546_Assignments/R_Assignment/maize_final_files/chr2_teosinte_ascending_question.csv", row.names=F)
+```
+
+
+**teosinte** chromosome 3:
+```{r}
+chromosome3_teosinte_genotypes_snp<- filter(joined_teosinte_genotypes_snp, Chromosome == 3)
+
+chromosome3_teosinte_genotypes_snp_arrange_ascending <- arrange(chromosome3_teosinte_genotypes_snp, Position)
+
+write.csv(chromosome3_teosinte_genotypes_snp_arrange_ascending, "~/Desktop/BCB546_Assignments/R_Assignment/maize_final_files/chr3_teosinte_ascending_question.csv", row.names=F)
+```
+
+
+**teosinte** chromosome 4:
+```{r}
+chromosome4_teosinte_genotypes_snp<- filter(joined_teosinte_genotypes_snp, Chromosome == 4)
+
+chromosome4_teosinte_genotypes_snp_arrange_ascending <- arrange(chromosome4_teosinte_genotypes_snp, Position)
+
+write.csv(chromosome4_teosinte_genotypes_snp_arrange_ascending, "~/Desktop/BCB546_Assignments/R_Assignment/maize_final_files/chr4_teosinte_ascending_question.csv", row.names=F)
+```
+
+**teosinte** chromosome 5:
+```{r}
+chromosome5_teosinte_genotypes_snp<- filter(joined_teosinte_genotypes_snp, Chromosome == 5)
+
+chromosome5_teosinte_genotypes_snp_arrange_ascending <- arrange(chromosome5_teosinte_genotypes_snp, Position)
+
+write.csv(chromosome5_teosinte_genotypes_snp_arrange_ascending, "~/Desktop/BCB546_Assignments/R_Assignment/maize_final_files/chr5_teosinte_ascending_question.csv", row.names=F)
+```
+
+**teosinte** chromosome 6:
+```{r}
+chromosome6_teosinte_genotypes_snp<- filter(joined_teosinte_genotypes_snp, Chromosome == 6)
+
+chromosome6_teosinte_genotypes_snp_arrange_ascending <- arrange(chromosome6_teosinte_genotypes_snp, Position)
+
+write.csv(chromosome6_teosinte_genotypes_snp_arrange_ascending, "~/Desktop/BCB546_Assignments/R_Assignment/maize_final_files/chr6_teosinte_ascending_question.csv", row.names=F)
+```
+
+**teosinte** chromosome 7:
+```{r}
+chromosome7_teosinte_genotypes_snp<- filter(joined_teosinte_genotypes_snp, Chromosome == 7)
+
+chromosome7_teosinte_genotypes_snp_arrange_ascending <- arrange(chromosome7_teosinte_genotypes_snp, Position)
+
+write.csv(chromosome7_teosinte_genotypes_snp_arrange_ascending, "~/Desktop/BCB546_Assignments/R_Assignment/maize_final_files/chr7_teosinte_ascending_question.csv", row.names=F)
+```
+
+**teosinte** chromosome 8:
+```{r}
+chromosome8_teosinte_genotypes_snp<- filter(joined_teosinte_genotypes_snp, Chromosome == 8)
+
+chromosome8_teosinte_genotypes_snp_arrange_ascending <- arrange(chromosome8_teosinte_genotypes_snp, Position)
+
+write.csv(chromosome8_teosinte_genotypes_snp_arrange_ascending, "~/Desktop/BCB546_Assignments/R_Assignment/final_files/chr8_teosinte_ascending_question.csv", row.names=F)
+```
+
+**teosinte** chromosome 9:
+```{r}
+chromosome9_teosinte_genotypes_snp<- filter(joined_teosinte_genotypes_snp, Chromosome == 9)
+
+chromosome9_teosinte_genotypes_snp_arrange_ascending <- arrange(chromosome9_teosinte_genotypes_snp, Position)
+
+write.csv(chromosome9_teosinte_genotypes_snp_arrange_ascending, "~/Desktop/BCB546_Assignments/R_Assignment/final_files/chr9_teosinte_ascending_question.csv", row.names=F)
+```
+
+**teosinte** chromosome 10:
+```{r}
+chromosome10_teosinte_genotypes_snp<- filter(joined_teosinte_genotypes_snp, Chromosome == 10)
+
+chromosome10_teosinte_genotypes_snp_arrange_ascending <- arrange(chromosome10_teosinte_genotypes_snp, Position)
+
+write.csv(chromosome10_teosinte_genotypes_snp_arrange_ascending, "~/Desktop/BCB546_Assignments/R_Assignment/final_files/chr10_teosinte_ascending_question.csv", row.names=F)
+```
+
+
+For all the **maize** files that are chromosome specific (chromosome 1-10), with **decending** chromosome position values, and missing data encoded by a **-** :
+```{r}
+chromosome1_maize_genotypes_snp_arrange_descending <- arrange(chromosome1_maize_genotypes_snp, desc(Position))
+```
+
+
+# Part II
+```{r}
+practice_plot <- ggplot(data = joined_maize_genotypes_snp, aes(x = Position, y = Chromosome)) + geom_point()
+```
+
 
