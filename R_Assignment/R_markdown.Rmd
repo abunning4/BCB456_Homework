@@ -15,9 +15,6 @@ Load in data to my project:
 ```{r}
 genotype_data_raw <- read.table(file = "fang_et_al_genotypes.txt", header = TRUE)
 
-typeof(genotype_data_raw)
-
-str(genotype_data_raw)
 ```
 
 `snp_position.txt`:
@@ -251,11 +248,11 @@ write.csv(chromosome10_maize_genotypes_snp_arrange_ascending, "~/Desktop/BCB546_
 
 **teosinte** chromosome 1: 
 ```{r}
-chromosome1_teosinte_genotypes_snp<- filter(joined_teosinte_genotypes_snp, Chromosome == 1)
+chromosome1_teosinte_genotypes_snp <- filter(joined_teosinte_genotypes_snp, Chromosome == 1)
 
 chromosome1_teosinte_genotypes_snp_arrange_ascending <- arrange(chromosome1_teosinte_genotypes_snp, Position)
 
-write.csv(chromosome1_teosinte_genotypes_snp_arrange_ascending, "~/Desktop/BCB546_Assignments/R_Assignment/maize_final_files/chr1_teosinte_ascending_question.csv", row.names=F)
+write.csv(chromosome1_teosinte_genotypes_snp_arrange_ascending, "~/Desktop/BCB546_Assignments/R_Assignment/final_files/chr1_teosinte_ascending_question.csv", row.names=F)
 ```
 
 **teosinte** chromosome 2: 
@@ -264,7 +261,7 @@ chromosome2_teosinte_genotypes_snp<- filter(joined_teosinte_genotypes_snp, Chrom
 
 chromosome2_teosinte_genotypes_snp_arrange_ascending <- arrange(chromosome2_teosinte_genotypes_snp, Position)
 
-write.csv(chromosome2_teosinte_genotypes_snp_arrange_ascending, "~/Desktop/BCB546_Assignments/R_Assignment/maize_final_files/chr2_teosinte_ascending_question.csv", row.names=F)
+write.csv(chromosome2_teosinte_genotypes_snp_arrange_ascending, "~/Desktop/BCB546_Assignments/R_Assignment/final_files/chr2_teosinte_ascending_question.csv", row.names=F)
 ```
 
 
@@ -274,7 +271,7 @@ chromosome3_teosinte_genotypes_snp<- filter(joined_teosinte_genotypes_snp, Chrom
 
 chromosome3_teosinte_genotypes_snp_arrange_ascending <- arrange(chromosome3_teosinte_genotypes_snp, Position)
 
-write.csv(chromosome3_teosinte_genotypes_snp_arrange_ascending, "~/Desktop/BCB546_Assignments/R_Assignment/maize_final_files/chr3_teosinte_ascending_question.csv", row.names=F)
+write.csv(chromosome3_teosinte_genotypes_snp_arrange_ascending, "~/Desktop/BCB546_Assignments/R_Assignment/final_files/chr3_teosinte_ascending_question.csv", row.names=F)
 ```
 
 
@@ -284,7 +281,7 @@ chromosome4_teosinte_genotypes_snp<- filter(joined_teosinte_genotypes_snp, Chrom
 
 chromosome4_teosinte_genotypes_snp_arrange_ascending <- arrange(chromosome4_teosinte_genotypes_snp, Position)
 
-write.csv(chromosome4_teosinte_genotypes_snp_arrange_ascending, "~/Desktop/BCB546_Assignments/R_Assignment/maize_final_files/chr4_teosinte_ascending_question.csv", row.names=F)
+write.csv(chromosome4_teosinte_genotypes_snp_arrange_ascending, "~/Desktop/BCB546_Assignments/R_Assignment/final_files/chr4_teosinte_ascending_question.csv", row.names=F)
 ```
 
 **teosinte** chromosome 5:
@@ -293,7 +290,7 @@ chromosome5_teosinte_genotypes_snp<- filter(joined_teosinte_genotypes_snp, Chrom
 
 chromosome5_teosinte_genotypes_snp_arrange_ascending <- arrange(chromosome5_teosinte_genotypes_snp, Position)
 
-write.csv(chromosome5_teosinte_genotypes_snp_arrange_ascending, "~/Desktop/BCB546_Assignments/R_Assignment/maize_final_files/chr5_teosinte_ascending_question.csv", row.names=F)
+write.csv(chromosome5_teosinte_genotypes_snp_arrange_ascending, "~/Desktop/BCB546_Assignments/R_Assignment/final_files/chr5_teosinte_ascending_question.csv", row.names=F)
 ```
 
 **teosinte** chromosome 6:
@@ -302,7 +299,7 @@ chromosome6_teosinte_genotypes_snp<- filter(joined_teosinte_genotypes_snp, Chrom
 
 chromosome6_teosinte_genotypes_snp_arrange_ascending <- arrange(chromosome6_teosinte_genotypes_snp, Position)
 
-write.csv(chromosome6_teosinte_genotypes_snp_arrange_ascending, "~/Desktop/BCB546_Assignments/R_Assignment/maize_final_files/chr6_teosinte_ascending_question.csv", row.names=F)
+write.csv(chromosome6_teosinte_genotypes_snp_arrange_ascending, "~/Desktop/BCB546_Assignments/R_Assignment/final_files/chr6_teosinte_ascending_question.csv", row.names=F)
 ```
 
 **teosinte** chromosome 7:
@@ -343,10 +340,194 @@ write.csv(chromosome10_teosinte_genotypes_snp_arrange_ascending, "~/Desktop/BCB5
 
 
 For all the **maize** files that are chromosome specific (chromosome 1-10), with **decending** chromosome position values, and missing data encoded by a **-** :
+
+**maize** chromosome 1:
 ```{r}
 chromosome1_maize_genotypes_snp_arrange_descending <- arrange(chromosome1_maize_genotypes_snp, desc(Position))
+
+chromosome1_maize_decending_dash <- as.data.frame(lapply(chromosome1_maize_genotypes_snp_arrange_descending, FUN = function(x)as.character(gsub("\\?", "-", x))))
+
+write.csv(chromosome1_maize_decending_dash, "~/Desktop/BCB546_Assignments/R_Assignment/final_files/chr1_maize_decending_dash.csv", row.names=F)
 ```
 
+**maize** chromosome 2:
+```{r}
+chromosome2_maize_genotypes_snp_arrange_descending <- arrange(chromosome2_maize_genotypes_snp, desc(Position))
+
+chromosome2_maize_decending_dash <- as.data.frame(lapply(chromosome2_maize_genotypes_snp_arrange_descending, FUN = function(x)as.character(gsub("\\?", "-", x))))
+
+write.csv(chromosome2_maize_decending_dash, "~/Desktop/BCB546_Assignments/R_Assignment/final_files/chr2_maize_decending_dash.csv", row.names=F)
+```
+
+**maize** chromosome 3:
+```{r}
+chromosome3_maize_genotypes_snp_arrange_descending <- arrange(chromosome3_maize_genotypes_snp, desc(Position))
+
+chromosome3_maize_decending_dash <- as.data.frame(lapply(chromosome3_maize_genotypes_snp_arrange_descending, FUN = function(x)as.character(gsub("\\?", "-", x))))
+
+write.csv(chromosome3_maize_decending_dash, "~/Desktop/BCB546_Assignments/R_Assignment/final_files/chr3_maize_decending_dash.csv", row.names=F)
+```
+
+
+
+**maize** chromosome 4:
+```{r}
+chromosome4_maize_genotypes_snp_arrange_descending <- arrange(chromosome4_maize_genotypes_snp, desc(Position))
+
+chromosome4_maize_decending_dash <- as.data.frame(lapply(chromosome4_maize_genotypes_snp_arrange_descending, FUN = function(x)as.character(gsub("\\?", "-", x))))
+
+write.csv(chromosome4_maize_decending_dash, "~/Desktop/BCB546_Assignments/R_Assignment/final_files/chr4_maize_decending_dash.csv", row.names=F)
+```
+
+
+**maize** chromosome 5:
+```{r}
+chromosome5_maize_genotypes_snp_arrange_descending <- arrange(chromosome5_maize_genotypes_snp, desc(Position))
+
+chromosome5_maize_decending_dash <- as.data.frame(lapply(chromosome5_maize_genotypes_snp_arrange_descending, FUN = function(x)as.character(gsub("\\?", "-", x))))
+
+write.csv(chromosome5_maize_decending_dash, "~/Desktop/BCB546_Assignments/R_Assignment/final_files/chr5_maize_decending_dash.csv", row.names=F)
+```
+
+
+**maize** chromosome 6:
+```{r}
+chromosome6_maize_genotypes_snp_arrange_descending <- arrange(chromosome6_maize_genotypes_snp, desc(Position))
+
+chromosome6_maize_decending_dash <- as.data.frame(lapply(chromosome6_maize_genotypes_snp_arrange_descending, FUN = function(x)as.character(gsub("\\?", "-", x))))
+
+write.csv(chromosome6_maize_decending_dash, "~/Desktop/BCB546_Assignments/R_Assignment/final_files/chr6_maize_decending_dash.csv", row.names=F)
+```
+
+**maize** chromosome 7:
+```{r}
+chromosome7_maize_genotypes_snp_arrange_descending <- arrange(chromosome7_maize_genotypes_snp, desc(Position))
+
+chromosome7_maize_decending_dash <- as.data.frame(lapply(chromosome7_maize_genotypes_snp_arrange_descending, FUN = function(x)as.character(gsub("\\?", "-", x))))
+
+write.csv(chromosome7_maize_decending_dash, "~/Desktop/BCB546_Assignments/R_Assignment/final_files/chr7_maize_decending_dash.csv", row.names=F)
+```
+
+**maize** chromosome 8: 
+```{r}
+chromosome8_maize_genotypes_snp_arrange_descending <- arrange(chromosome8_maize_genotypes_snp, desc(Position))
+
+chromosome8_maize_decending_dash <- as.data.frame(lapply(chromosome8_maize_genotypes_snp_arrange_descending, FUN = function(x)as.character(gsub("\\?", "-", x))))
+
+write.csv(chromosome8_maize_decending_dash, "~/Desktop/BCB546_Assignments/R_Assignment/final_files/chr8_maize_decending_dash.csv", row.names=F)
+```
+
+**maize** chromosome 9:
+```{r}
+chromosome9_maize_genotypes_snp_arrange_descending <- arrange(chromosome9_maize_genotypes_snp, desc(Position))
+
+chromosome9_maize_decending_dash <- as.data.frame(lapply(chromosome9_maize_genotypes_snp_arrange_descending, FUN = function(x)as.character(gsub("\\?", "-", x))))
+
+write.csv(chromosome9_maize_decending_dash, "~/Desktop/BCB546_Assignments/R_Assignment/final_files/chr9_maize_decending_dash.csv", row.names=F)
+```
+
+
+**maize** chromosome 10:
+```{r}
+chromosome10_maize_genotypes_snp_arrange_descending <- arrange(chromosome10_maize_genotypes_snp, desc(Position))
+
+chromosome10_maize_decending_dash <- as.data.frame(lapply(chromosome10_maize_genotypes_snp_arrange_descending, FUN = function(x)as.character(gsub("\\?", "-", x))))
+
+write.csv(chromosome10_maize_decending_dash, "~/Desktop/BCB546_Assignments/R_Assignment/final_files/chr10_maize_decending_dash.csv", row.names=F)
+```
+
+For all the **teosinte** files that are chromosome specific (chromosome 1-10), with **decending** chromosome position values, and missing data encoded by a **-** :
+
+**teosinte** chromosome 1:
+```{r}
+chromosome1_teosinte_genotypes_snp_arrange_descending <- arrange(chromosome1_teosinte_genotypes_snp, desc(Position))
+
+chromosome1_teosinte_decending_dash <- as.data.frame(lapply(chromosome1_teosinte_genotypes_snp_arrange_descending, FUN = function(x)as.character(gsub("\\?", "-", x))))
+
+write.csv(chromosome1_teosinte_decending_dash, "~/Desktop/BCB546_Assignments/R_Assignment/final_files/chr1_teosinte_decending_dash.csv", row.names=F)
+```
+
+**teostine** chromosome 2:
+```{r}
+chromosome2_teosinte_genotypes_snp_arrange_descending <- arrange(chromosome2_teosinte_genotypes_snp, desc(Position))
+
+chromosome2_teosinte_decending_dash <- as.data.frame(lapply(chromosome2_teosinte_genotypes_snp_arrange_descending, FUN = function(x)as.character(gsub("\\?", "-", x))))
+
+write.csv(chromosome2_teosinte_decending_dash, "~/Desktop/BCB546_Assignments/R_Assignment/final_files/chr2_teosinte_decending_dash.csv", row.names=F)
+```
+
+**teosinte** chromosome 3:
+```{r}
+chromosome3_teosinte_genotypes_snp_arrange_descending <- arrange(chromosome3_teosinte_genotypes_snp, desc(Position))
+
+chromosome3_teosinte_decending_dash <- as.data.frame(lapply(chromosome3_teosinte_genotypes_snp_arrange_descending, FUN = function(x)as.character(gsub("\\?", "-", x))))
+
+write.csv(chromosome3_teosinte_decending_dash, "~/Desktop/BCB546_Assignments/R_Assignment/final_files/chr3_teosinte_decending_dash.csv", row.names=F)
+```
+
+**teosinte** chromosome 4:
+```{r}
+chromosome4_teosinte_genotypes_snp_arrange_descending <- arrange(chromosome4_teosinte_genotypes_snp, desc(Position))
+
+chromosome4_teosinte_decending_dash <- as.data.frame(lapply(chromosome4_teosinte_genotypes_snp_arrange_descending, FUN = function(x)as.character(gsub("\\?", "-", x))))
+
+write.csv(chromosome4_teosinte_decending_dash, "~/Desktop/BCB546_Assignments/R_Assignment/final_files/chr4_teosinte_decending_dash.csv", row.names=F)
+```
+
+**teosinte** chromosome 5:
+```{r}
+chromosome5_teosinte_genotypes_snp_arrange_descending <- arrange(chromosome5_teosinte_genotypes_snp, desc(Position))
+
+chromosome5_teosinte_decending_dash <- as.data.frame(lapply(chromosome5_teosinte_genotypes_snp_arrange_descending, FUN = function(x)as.character(gsub("\\?", "-", x))))
+
+write.csv(chromosome5_teosinte_decending_dash, "~/Desktop/BCB546_Assignments/R_Assignment/final_files/chr5_teosinte_decending_dash.csv", row.names=F)
+```
+
+**teosinte** chromosome 6:
+```{r}
+chromosome6_teosinte_genotypes_snp_arrange_descending <- arrange(chromosome6_teosinte_genotypes_snp, desc(Position))
+
+chromosome6_teosinte_decending_dash <- as.data.frame(lapply(chromosome6_teosinte_genotypes_snp_arrange_descending, FUN = function(x)as.character(gsub("\\?", "-", x))))
+
+write.csv(chromosome6_teosinte_decending_dash, "~/Desktop/BCB546_Assignments/R_Assignment/final_files/chr6_teosinte_decending_dash.csv", row.names=F)
+```
+
+**teosinte** chromosome 7:
+```{r}
+chromosome7_teosinte_genotypes_snp_arrange_descending <- arrange(chromosome7_teosinte_genotypes_snp, desc(Position))
+
+chromosome7_teosinte_decending_dash <- as.data.frame(lapply(chromosome7_teosinte_genotypes_snp_arrange_descending, FUN = function(x)as.character(gsub("\\?", "-", x))))
+
+write.csv(chromosome7_teosinte_decending_dash, "~/Desktop/BCB546_Assignments/R_Assignment/final_files/chr7_teosinte_decending_dash.csv", row.names=F)
+```
+
+**teosinte** chromosome 8:
+```{r}
+chromosome8_teosinte_genotypes_snp_arrange_descending <- arrange(chromosome8_teosinte_genotypes_snp, desc(Position))
+
+chromosome8_teosinte_decending_dash <- as.data.frame(lapply(chromosome8_teosinte_genotypes_snp_arrange_descending, FUN = function(x)as.character(gsub("\\?", "-", x))))
+
+write.csv(chromosome8_teosinte_decending_dash, "~/Desktop/BCB546_Assignments/R_Assignment/final_files/chr8_teosinte_decending_dash.csv", row.names=F)
+```
+
+**teosinte** chromosome 9:
+```{r}
+chromosome9_teosinte_genotypes_snp_arrange_descending <- arrange(chromosome9_teosinte_genotypes_snp, desc(Position))
+
+chromosome9_teosinte_decending_dash <- as.data.frame(lapply(chromosome9_teosinte_genotypes_snp_arrange_descending, FUN = function(x)as.character(gsub("\\?", "-", x))))
+
+write.csv(chromosome9_teosinte_decending_dash, "~/Desktop/BCB546_Assignments/R_Assignment/final_files/chr9_teosinte_decending_dash.csv", row.names=F)
+```
+
+
+**teosinte** chromosome 10:
+```{r}
+chromosome10_teosinte_genotypes_snp_arrange_descending <- arrange(chromosome10_teosinte_genotypes_snp, desc(Position))
+
+chromosome10_teosinte_decending_dash <- as.data.frame(lapply(chromosome10_teosinte_genotypes_snp_arrange_descending, FUN = function(x)as.character(gsub("\\?", "-", x))))
+
+write.csv(chromosome10_teosinte_decending_dash, "~/Desktop/BCB546_Assignments/R_Assignment/final_files/chr10_teosinte_decending_dash.csv", row.names=F)
+```
 
 # Part II
 ```{r}
