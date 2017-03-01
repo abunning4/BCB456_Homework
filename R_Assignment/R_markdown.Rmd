@@ -88,7 +88,7 @@ snp_summary
 
 * First, separate out the groups of interest we want for maize (ZMMIL, ZMMLR, and ZMMMR) and teosinte (ZMPBA, ZMPIL, and ZMPJA) from `fang_et_al_genotypes.txt`:
 
-```{r}
+```{r, message=FALSE}
 library(dplyr)
 ```
 
@@ -530,8 +530,75 @@ write.csv(chromosome10_teosinte_decending_dash, "~/Desktop/BCB546_Assignments/R_
 ```
 
 # Part II
+
+* Reshape raw data with `melt` using `reshape2`:
 ```{r}
-practice_plot <- ggplot(data = joined_maize_genotypes_snp, aes(x = Position, y = Chromosome)) + geom_point()
+library(reshape2)
+tidy_fang <- melt(genotype_data_raw, c(1,3), c(4:986))
+head(tidy_fang)
+tidy_data_teosinte <- melt(joined_teosinte_genotypes_snp)
+tidy_snp <- melt(snp_position_data_raw, "Chromosome", "SNP_ID")
 ```
+
+* Plot total SNPs per chromosome: 
+```{r}
+library(ggplot2)
+total_snps_per_chromosome <- ggplot(data = tidy_snp, aes(x = Chromosome)) + geom_bar() + ylab("SNPs per chromosome") + xlab("Chromosome Number")
+
+total_snps_per_chromosome
+```
+
+* It seems that the most SNPs map to chromosome 1 between both maize and teosinte. 
+
+
+* Plot Missing data and amount of heterozygosity
+```{r}
+homo_het <- function(x){
+  if(x == "?/?")
+    return("NA")
+  else if (x == "G/G" | x == "A/A" | x == "C/C" | x == "T/T") 
+    return("homo")
+  else
+    return("het")
+}
+tidy_fang$homo_het <- as.character(lapply(tidy_fang$value, FUN = homo_het))
+tidy_fang
+```
+
+```{r}
+ZMMIL <- tidy_fang$homo_het[tidy_fang$Group == "ZMMIL"]
+
+ZMMLR <- tidy_fang$homo_het[tidy_fang$Group == "ZMMLR"]
+
+ZMMMR <- tidy_fang$homo_het[tidy_fang$Group == "ZMMMR"]
+
+ZMPBA <- tidy_fang$homo_het[tidy_fang$Group == "ZMPBA"]
+
+ZMPIL <- tidy_fang$homo_het[tidy_fang$Group == "ZMPIL"]
+
+ZMPJA <- tidy_fang$homo_het[tidy_fang$Group == "ZMPJA"]
+
+
+ZMMIL <- c(sum(c(ZMMIL == "homo")),sum(c(ZMMIL == "het")),sum(c(ZMMIL == "NA")))
+
+ZMMLR <-c(sum(c(ZMMLR == "homo")), sum(c(ZMMLR == "het")), sum(c(ZMMLR == "NA")))
+
+ZMMMR <- c(sum(c(ZMMMR == "homo")), sum(c(ZMMMR == "het")), sum(c(ZMMMR == "NA")))
+
+ZMPBA <- c(sum(c(ZMPBA == "homo")), sum(c(ZMPBA == "het")), sum(c(ZMPBA == "NA")))
+
+ZMPIL <- c(sum(c(ZMPIL == "homo")),sum(c(ZMPIL == "het")),sum(c(ZMPIL == "NA")))
+
+ZMPJA <- c(sum(c(ZMPJA == "homo")), sum(c(ZMPJA == "het")), sum(c(ZMPJA == "NA")))
+
+het_data.frame <- data.frame(cbind(ZMMIL, ZMMLR, ZMMMR, ZMPBA, ZMPIL, ZMPJA))
+grps <- c("ZMMIL", "ZMMLR", "ZMMMR", "ZMPBA","ZMPIL", "ZMPJA")
+het_df.melt <- melt(het_data.frame)
+het_df.melt$type <- c("homo", "het", "NA")
+het_df.melt
+ggplot(data = het_df.melt, aes(x = variable, y = value, fill = type)) + geom_bar(stat = "identity", position= "dodge") + xlab("Group") + ylab("Number of SNPs")
+
+```
+
 
 
