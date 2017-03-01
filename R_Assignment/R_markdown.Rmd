@@ -550,7 +550,7 @@ tidy_snp <- melt(snp_position_data_raw, "Chromosome", "SNP_ID")
 library(ggplot2)
 total_snps_per_chromosome <- ggplot(data = tidy_snp, aes(x = Chromosome)) + geom_bar() + ylab("SNPs per chromosome") + xlab("Chromosome Number")
 
-total_snps_per_chromosome
+print(total_snps_per_chromosome)
 ```
 
 * It seems that the most SNPs map to chromosome 1 between both maize and teosinte. 
@@ -601,6 +601,7 @@ grps <- c("ZMMIL", "ZMMLR", "ZMMMR", "ZMPBA","ZMPIL", "ZMPJA")
 het_df.melt <- melt(het_data.frame)
 het_df.melt$type <- c("homo", "het", "NA")
 het_df.melt
+
 ggplot(data = het_df.melt, aes(x = variable, y = value, fill = type)) + geom_bar(stat = "identity", position= "dodge") + xlab("Group") + ylab("Number of SNPs")
 
 ```
