@@ -1,0 +1,90 @@
+---
+title: "Genomic_Ranges_Assignment"
+author: Angela Bunning
+Date: April 21, 2017
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Load packages needed for the project: 
+```{r}
+library(GenomicRanges)
+library(IRanges)
+library(S4Vectors)
+library(stats4)
+library(GenomeInfoDb)
+library(rtracklayer)
+library(GenomicFeatures)
+library(AnnotationDbi)
+library(Biobase)
+library(BiocInstaller)
+```
+
+Import the file for variants from **Mus musculus** of chromosome 1: 
+```{r}
+dbsnp137 <- import("mm10_snp137_chr1_trunc.bed.gz")
+```
+
+Load a package that will annotate chromosome 1 of **Mus musculus**
+```{r}
+biocLite("TxDb.Mmusculus.UCSC.mm10.ensGene")
+
+library(TxDb.Mmusculus.UCSC.mm10.ensGene)
+
+txdb <- TxDb.Mmusculus.UCSC.mm10.ensGene
+```
+
+Collapse all overlapping exons in the genome and create a GRange object that is only exons from chromosome 1, our chromosome of interest for this project:
+```{r}
+collapsed_exons <- reduce(exons(txdb), ignore.strand=TRUE) #ignore what strand the range is located on
+chr1_collapsed_exons <- collapsed_exons[seqnames(collapsed_exons) == "chr1"] #subset only chromosome 1 exons from the overall collapsed_exons data 
+```
+
+Check the variant file to ensure there are no ranges that have a variant of zero because the range cannot be determined:
+```{r}
+summary(width(dbsnp137))
+```
+
+To resize the width to get the range:
+```{r}
+dbsnp137_resized <- dbsnp137 #put the variants into a resized object
+zw_i <- width(dbsnp137_resized) == 0 #put any variants with a width of 0 in this object
+dbsnp137_resized[zw_i] <- resize(dbsnp137_resized[zw_i], width=1) #resize these variants to a width of 1
+
+```
+
+Pull out any variants that overlap with exons on chromosome 1: 
+```{r}
+hits <- findOverlaps(dbsnp137_resized, chr1_collapsed_exons, ignore.strand=TRUE) #these variants will be stored in the hits object, still ignore the strand on which the range resides
+```
+
+Find the proportion of all hits that are unique: 
+```{r}
+length(unique(queryHits(hits))) # find the length of total number of unique hits
+
+length(unique(queryHits(hits)))/length(dbsnp137_resized) # takes the total number of unique hits and divides that over the length of the entire variant object to get proportion
+```
+
+Another way to find the variants per exon is by using the `countOverlaps()` function: 
+```{r}
+var_counts <- countOverlaps(chr1_collapsed_exons, dbsnp137_resized, ignore.strand=TRUE) #the count overlaps are being found in the chr1 collasped exon object and the strand is still being ignored and being stored in var_counts variable 
+```
+
+Appends the counts of the varints to the chromosome 1 exon dataframe: 
+```{r}
+chr1_collapsed_exons$num_vars <- var_counts
+```
+
+Make the GRange object into a dataframe:
+```{r}
+chr1_collapsed_exons_df <- as.data.frame(chr1_collapsed_exons)
+```
+
+Write the final dataframe with appended column to a `.csv` file:
+```{r}
+write.csv(chr1_collapsed_exons_df, file = "final_final_chromosome1.csv")
+```
+
