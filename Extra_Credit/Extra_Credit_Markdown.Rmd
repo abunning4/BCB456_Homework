@@ -1,0 +1,127 @@
+---
+title: "ExtraCredit_PromoterRegions_Flank&Promoters"
+author: Angela Bunning
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Load packages needed for the assignment:
+```{r}
+library(GenomicRanges)
+library(IRanges)
+library(S4Vectors)
+library(stats4)
+library(GenomeInfoDb)
+library(rtracklayer)
+library(GenomicFeatures)
+library(AnnotationDbi)
+library(Biobase)
+library(BiocInstaller)
+```
+
+# Retrieving Promoter Regions: Flank and Promoters 
+
+Load chromosome 1 with `rtracklayer` for all protien-coding genes from the GRCh38 *Mus musculus* Ensembl GTF annotation: 
+```{r}
+library(TxDb.Mmusculus.UCSC.mm10.ensGene)
+
+txdb <- TxDb.Mmusculus.UCSC.mm10.ensGene
+
+mm_gtf <- import('Extra_Credit/Mus_musculus.GRCm38.75_chr1.gtf.gz')
+```
+
+This gives us an overview of all genomic fetures on this chromosome including protien-coding sequences, long non-coding RNAs, and many others. We just want protien-coding genes:
+```{r}
+table(mm_gtf$gene_biotype) #generates a table of the number of each biotype located on chromosome 1 
+```
+
+Subset for protien coding sequences only:
+```{r}
+chr1_pcg <- mm_gtf[mm_gtf$type == "gene" & mm_gtf$gene_biotype == "protein_coding"]
+# subsets the entire set by the type of feature, gene and then by the gene biotype which is protien coding in our case 
+
+summary(width(chr1_pcg)) 
+
+length(chr1_pcg) 
+```
+
+Using `flank()` we can specify how large the range we want to grab is:
+```{r}
+chr1_pcg_3kb_up <- flank(chr1_pcg, width = 3000) #the default for flank is to ignore the strand, which needs to be on for this function
+```
+
+# Retrieving Promoter Sequence: Connection GenomicRanges with Sequence Data
+
+Install pakages that allow us to work with the *Mus musculus* genome:
+```{r}
+library(BiocInstaller)
+biocLite("BSgenome")
+biocLite("BSgenome.Mmusculus.UCSC.mm10")
+mm_gm <- BSgenome.Mmusculus.UCSC.mm10::BSgenome.Mmusculus.UCSC.mm10
+```
+
+Check the genome to ensure it's working correctly:
+```{r}
+organism(mm_gm) #tell us which organism the genome belongs to
+```
+
+```{r}
+providerVersion(mm_gm) # what version of the genome it is
+```
+
+```{r}
+provider(mm_gm) # institution who is maintaning/providing the genome
+```
+
+Genome specs:
+```{r}
+seqinfo(mm_gm)
+```
+
+Changing annotation and format of sequences to make them the same:
+```{r}
+all(seqlevels(chr1_pcg_3kb_up) %in% seqlevels(mm_gm)) 
+```
+
+```{r}
+gr <- GRanges(c("chr1", "chr2"), IRanges(start=c(3,4), width = 10)) # create GRange object (gr) so we can manually change the names of the chromosomes
+
+seqlevels(gr) # function shows you how the chromosomes are annoted in the GRanges object
+```
+
+```{r}
+seqlevels(gr) <- c("1", "2") # change the levels with the provided vector 
+
+seqlevels(gr) # recheck to see if the change worked, and it did! 
+```
+
+```{r}
+seqlevelsStyle(chr1_pcg_3kb_up) # shows us that because we changed from chr1 (UCSC style) to just 1, it converts it to NCBI and other genome search tools
+```
+
+```{r}
+seqlevelsStyle(mm_gm)  
+```
+
+```{r}
+seqlevelsStyle(chr1_pcg_3kb_up) <- "UCSC" # now we set the style UCSC to make the two consistent
+```
+
+```{r}
+all(seqlevels(chr1_pcg_3kb_up) %in% seqlevels(mm_gm)) # and both are ready to go
+```
+
+Now we can grab sequences for regions of the genome between the two because they are are consistent: 
+```{r}
+chr1_3kb_seqs <- getSeq(mm_gm, chr1_pcg_3kb_up) # grabs sequences we want and stores them in object
+chr1_3kb_seqs
+```
+
+Now we can put these ranges we wanted into a file for further downstream work:
+```{r}
+writeXStringSet(chr1_3kb_seqs, file = "mm10_chr1_3kb_promoters.fasta", format = "fasta")
+```
+

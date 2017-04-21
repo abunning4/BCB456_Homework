@@ -23,12 +23,12 @@ library(Biobase)
 library(BiocInstaller)
 ```
 
-Import the file for variants from **Mus musculus** of chromosome 1: 
+Import the file for variants from *Mus musculus* of chromosome 1: 
 ```{r}
 dbsnp137 <- import("mm10_snp137_chr1_trunc.bed.gz")
 ```
 
-Load a package that will annotate chromosome 1 of **Mus musculus**
+Load a package that will annotate chromosome 1 of *Mus musculus*
 ```{r}
 biocLite("TxDb.Mmusculus.UCSC.mm10.ensGene")
 
